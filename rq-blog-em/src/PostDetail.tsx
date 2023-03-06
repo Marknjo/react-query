@@ -14,9 +14,10 @@ async function deletePost(postId: string) {
 }
 
 export interface Post {
+  userId: number;
   title: string;
   body: string;
-  id: string;
+  id: number;
 }
 
 export interface Comment {

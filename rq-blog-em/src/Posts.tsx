@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { PostDetail, Post } from "./PostDetail";
@@ -14,8 +15,32 @@ export function Posts() {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({ queryKey: ["em-posts"], queryFn: fetchPosts });
+
+  if (isLoading) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div>
+        <h4>Oops! Something was wrong when loading Posts. Try again!</h4>
+        <p>{error!.toString()}</p>
+      </div>
+    );
+  }
+
   // replace with useQuery
-  const data: Post[] | [] = [];
+  const data: Post[] | [] = posts;
 
   return (
     <>
@@ -23,14 +48,13 @@ export function Posts() {
         {data.map((post) => (
           <li
             key={post.id}
-            className="post-title"
-            onClick={() => setSelectedPost(post)}
-          >
+            className='post-title'
+            onClick={() => setSelectedPost(post)}>
             {post.title}
           </li>
         ))}
       </ul>
-      <div className="pages">
+      <div className='pages'>
         <button disabled onClick={() => {}}>
           Previous page
         </button>
