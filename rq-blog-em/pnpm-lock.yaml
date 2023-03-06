@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@tanstack/react-query': ^4.26.0
+  '@tanstack/react-query-devtools': ^4.26.0
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
   '@vitejs/plugin-react': ^3.1.0
@@ -12,6 +13,7 @@ specifiers:
 
 dependencies:
   '@tanstack/react-query': 4.26.0_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-query-devtools': 4.26.0_5hzrghlx6t3gi6xtnmlxdxfsqq
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -488,8 +490,30 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@tanstack/match-sorter-utils/8.7.6:
+    resolution: {integrity: sha512-2AMpRiA6QivHOUiBpQAVxjiHAA68Ei23ZUMNaRJrN6omWiSFLoYrxGcT6BXtuzp0Jw4h6HZCmGGIM/gbwebO2A==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.4.2
+    dev: false
+
   /@tanstack/query-core/4.26.0:
     resolution: {integrity: sha512-9CRqXmCH82KZDKmezoGU4FOn1Oqbzlp2/zf71n+9nC58e7NSqCIjfSCMpqQWcu9YqUcUykxZEUunOyKHVc6BJA==}
+    dev: false
+
+  /@tanstack/react-query-devtools/4.26.0_5hzrghlx6t3gi6xtnmlxdxfsqq:
+    resolution: {integrity: sha512-KRZBdcqXrYYlN/35JSZV0XsbbW2Nc0ktzq6DHUeeOeGQs+RpKb+7CnUqoREe5FNL/mdhhx/UPzcRABl8zVjUpQ==}
+    peerDependencies:
+      '@tanstack/react-query': 4.26.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tanstack/match-sorter-utils': 8.7.6
+      '@tanstack/react-query': 4.26.0_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      superjson: 1.12.2
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /@tanstack/react-query/4.26.0_biqbaboplfbrettd7655fr4n2y:
@@ -593,6 +617,13 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
+  /copy-anything/3.0.3:
+    resolution: {integrity: sha512-fpW2W/BqEzqPp29QS+MwwfisHCQZtiduTe/m8idFo0xbti9fIZ2WVhAsCv4ggFVH3AgCkVdpoOCtQC6gBrdhjw==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.8
+    dev: false
+
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
     dev: true
@@ -693,6 +724,11 @@ packages:
       has: 1.0.3
     dev: true
 
+  /is-what/4.1.8:
+    resolution: {integrity: sha512-yq8gMao5upkPoGEU9LsB2P+K3Kt8Q3fQFCGyNCWOAnJAMzEXVV9drYb0TXr42TTliLLhKIBvulgAXgtLLnwzGA==}
+    engines: {node: '>=12.13'}
+    dev: false
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -781,6 +817,10 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
+  /remove-accents/0.4.2:
+    resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
+    dev: false
+
   /resolve/1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
     hasBin: true
@@ -813,6 +853,13 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /superjson/1.12.2:
+    resolution: {integrity: sha512-ugvUo9/WmvWOjstornQhsN/sR9mnGtWGYeTxFuqLb4AiT4QdUavjGFRALCPKWWnAiUJ4HTpytj5e0t5HoMRkXg==}
+    engines: {node: '>=10'}
+    dependencies:
+      copy-anything: 3.0.3
+    dev: false
 
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
