@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 async function fetchComments(postId: number) {
   const response = await fetch(
@@ -7,12 +7,19 @@ async function fetchComments(postId: number) {
   return response.json();
 }
 
-async function deletePost(postId: string) {
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/postId/${postId}`,
-    { method: "DELETE" }
-  );
-  return response.json();
+async function deletePost(postId: number) {
+  // const response = await fetch(
+  //   `https://jsonplaceholder.typicode.com/postId/${postId}`,
+  //   { method: "DELETE" }
+  // );
+  // return response.json();
+  let res = await new Promise((resolve) => {
+    setTimeout(() => resolve(`Success: Post Id (${postId}) deleted`), 2000);
+  });
+
+  return {
+    message: res,
+  };
 }
 
 export interface Post {
@@ -50,6 +57,8 @@ export function PostDetail({ post }: { post: Post }) {
     queryFn: () => fetchComments(post.id),
   });
 
+  const mutation = useMutation((postId: number) => deletePost(postId));
+
   if (isLoading) {
     return (
       <div>
@@ -75,9 +84,25 @@ export function PostDetail({ post }: { post: Post }) {
   return (
     <>
       <h3 style={{ color: "blue" }}>{post.title}</h3>
-      <button>Delete</button> <button>Update title</button>
+
+      <button onClick={() => mutation.mutate(post.id)}>Delete</button>
+      <button>Update title</button>
+
+      {mutation.isLoading && (
+        <p style={{ color: "purple" }}>Deleting Post...</p>
+      )}
+      {mutation.isSuccess && (
+        <p style={{ color: "green" }}>{mutation?.data?.message as string}</p>
+      )}
+      {mutation.isError && (
+        <p style={{ color: "red" }}>
+          Oops! Could not delete post id: {post.userId}
+        </p>
+      )}
+
       <p>{post.body}</p>
       <h4>Comments</h4>
+
       {data.map((comment) => (
         <li key={comment.id}>
           {comment.email}: {comment.body}
