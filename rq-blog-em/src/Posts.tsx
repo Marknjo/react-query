@@ -20,9 +20,10 @@ export function Posts() {
     if (currentPage < maxPostPage) {
       const nextPage = currentPage + 1;
 
-      queryClient.prefetchQuery(["em-posts", nextPage], () =>
-        fetchPosts(nextPage)
-      );
+      queryClient.prefetchQuery({
+        queryKey: ["em-posts", nextPage],
+        queryFn: () => fetchPosts(nextPage),
+      });
     }
   }, [currentPage, queryClient]);
 

@@ -65,8 +65,12 @@ export function PostDetail({ post }: { post: Post }) {
     queryFn: () => fetchComments(post.id),
   });
 
-  const deleteMutation = useMutation((postId: number) => deletePost(postId));
-  const updateMutation = useMutation((postId: number) => updatePost(postId));
+  const deleteMutation = useMutation({
+    mutationFn: (postId: number) => deletePost(postId),
+  });
+  const updateMutation = useMutation({
+    mutationFn: (postId: number) => updatePost(postId),
+  });
 
   if (isLoading) {
     return (
