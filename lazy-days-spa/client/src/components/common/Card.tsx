@@ -44,8 +44,14 @@ export function Card({
             alt={itemName}
           />
           <Text fontSize="xs" textAlign="center">
-            Photo by <Link href={image.authorLink}>{image.authorName}</Link>{' '}
-            from <Link href={image.platformLink}>{image.platformName}</Link>
+            Photo by{' '}
+            <Link href={image.authorLink} target="_blank">
+              {image.authorName}
+            </Link>{' '}
+            from{' '}
+            <Link href={image.platformLink} target="_blank">
+              {image.platformName}
+            </Link>
           </Text>
         </Box>
         <Stack pt={10}>
