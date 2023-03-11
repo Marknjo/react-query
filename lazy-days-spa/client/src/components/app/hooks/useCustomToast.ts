@@ -1,15 +1,10 @@
-import {
-  CloseAllToastsOptions,
-  ToastId,
-  useToast,
-  UseToastOptions,
-} from '@chakra-ui/react';
+import { ToastId, useToast, UseToastOptions } from '@chakra-ui/react';
 
 interface UseCustomToast {
   (options?: UseToastOptions | undefined): string | number | undefined;
   close: (id: ToastId) => void;
-  closeAll: (options?: CloseAllToastsOptions | undefined) => void;
-  update(id: ToastId, options): void;
+  closeAll: (options?: any | undefined) => void;
+  update(id: ToastId, options: any): void;
   isActive: (id: ToastId) => boolean | undefined;
 }
 
