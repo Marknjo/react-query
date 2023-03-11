@@ -45,7 +45,7 @@ export function getAvailableAppointments(
 
   // only keep appointments that are open (or taken by the logged-in user) and are not in the past)
   Object.keys(filteredAppointments).forEach((date) => {
-    filteredAppointments[date] = filteredAppointments[date].filter(
+    filteredAppointments[+date] = filteredAppointments[+date].filter(
       (appointment: Appointment) =>
         (!appointment.userId || appointment.userId === user?.id) &&
         !appointmentInPast(appointment),
