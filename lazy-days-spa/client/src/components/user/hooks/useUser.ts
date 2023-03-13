@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { User } from '../../../../../shared/types';
 import { axiosInstance, getJWTHeader } from '../../../axiosInstance';
@@ -11,11 +11,15 @@ import {
   setStoredUser,
 } from '../../../user-storage';
 
-async function getUser(user: User | null): Promise<User | null> {
+async function getUser(
+  user: User | null,
+  signal: AbortSignal | undefined,
+): Promise<User | null> {
   if (!user) return null;
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
     `/user/${user.id}`,
     {
+      signal,
       headers: getJWTHeader(user),
     },
   );
@@ -28,29 +32,38 @@ interface UseUser {
   clearUser: () => void;
 }
 
+const initialData = getStoredUser();
+
 export function useUser(): UseUser {
-  const [user, setUser] = useState<User | null>(getStoredUser());
   // call useQuery to update user data from server
-  useQuery({
-    enabled: !!user,
+  const { data: user } = useQuery({
     queryKey: [queryKeys.user],
-    queryFn: () => getUser(user),
-    onSuccess: (data) => setUser(data),
+    queryFn: ({ signal }) => getUser(initialData, signal), // Never executes
+    initialData,
   });
+
+  // Query client
+  const queryClient = useQueryClient();
 
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
-    // update the user in the query cache
-    setUser(newUser);
+    // Set local storage on login
 
-    // Update user in local storage
     setStoredUser(newUser);
+    // Pre-populate user profile in React Query client
+    queryClient.setQueryData([queryKeys.user], newUser);
   }
 
   // meant to be called from useAuth
   function clearUser() {
-    // TODO: reset user to null in query cache
+    // Clear local storage on logout
     clearStoredUser();
+
+    // Remove user appointments query
+    queryClient.removeQueries({ queryKey: ['user-appointments'] });
+
+    // reset user to null in query cache
+    queryClient.setQueryData([queryKeys.user], null);
   }
 
   return { user, updateUser, clearUser };

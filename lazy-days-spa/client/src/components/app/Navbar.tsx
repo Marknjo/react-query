@@ -27,6 +27,7 @@ const NavLink = ({ to, children }: { to: string; children: ReactNode }) => (
 
 export function Navbar(): ReactElement {
   const { user } = useUser();
+
   const { signout } = useAuth();
   const navigate = useNavigate();
 
