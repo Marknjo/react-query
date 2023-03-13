@@ -107,6 +107,7 @@ export function useAppointments(): UseAppointments {
     refetchOnMount: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
+    refetchInterval: 600000, // Auto Refetch new data every 10 minutes
   });
 
   /** ****************** END 3: useQuery  ******************************* */
