@@ -1,7 +1,13 @@
 // @ts-nocheck
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import { axiosInstance } from '../../../axiosInstance';
 import { queryKeys } from '../../../react-query/constants';
@@ -61,6 +67,10 @@ export function useAppointments(): UseAppointments {
   const { user } = useUser();
 
   /** ****************** END 2: filter appointments  ******************** */
+  const selectFn = useCallback(
+    (data) => getAvailableAppointments(data, user),
+    [user],
+  );
   /** ****************** START 3: useQuery  ***************************** */
   // useQuery call for appointments for the current monthYear
   const queryClient = useQueryClient();
@@ -85,9 +95,8 @@ export function useAppointments(): UseAppointments {
   const { data: appointments = {} } = useQuery({
     queryKey: [queryKeys.appointments, monthYear.year, monthYear.month],
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
+    select: showAll ? undefined : selectFn,
   });
-
-  console.log(appointments);
 
   /** ****************** END 3: useQuery  ******************************* */
 
