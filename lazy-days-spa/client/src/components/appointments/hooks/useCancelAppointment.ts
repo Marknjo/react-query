@@ -1,22 +1,49 @@
+import {
+  UseMutateFunction,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { Appointment } from '../../../../../shared/types';
 import { axiosInstance } from '../../../axiosInstance';
 import { queryKeys } from '../../../react-query/constants';
 import { useCustomToast } from '../../app/hooks/useCustomToast';
 
 // for when server call is needed
-// async function removeAppointmentUser(appointment: Appointment): Promise<void> {
-//   const patchData = [{ op: 'remove', path: '/userId' }];
-//   await axiosInstance.patch(`/appointment/${appointment.id}`, {
-//     data: patchData,
-//   });
-// }
+async function removeAppointmentUser(appointment: Appointment): Promise<void> {
+  const patchData = [{ op: 'remove', path: '/userId' }];
+  await axiosInstance.patch(`/appointment/${appointment.id}`, {
+    data: patchData,
+  });
+}
 
-// TODO: update return type
-export function useCancelAppointment(): (appointment: Appointment) => void {
+export function useCancelAppointment(): UseMutateFunction<
+  void,
+  unknown,
+  Appointment,
+  unknown
+> {
   const toast = useCustomToast();
+  const queryClient = useQueryClient();
 
-  // TODO: replace with mutate function
-  return (appointment: Appointment) => {
-    // nothing to see here
-  };
+  const { mutate } = useMutation({
+    // mutationFn(appointment: Appointment) {
+    //   return removeAppointmentUser(appointment);
+    // },
+
+    mutationFn: removeAppointmentUser,
+    onSuccess(_, variable) {
+      let treatment = variable.treatmentName;
+      let date = dayjs(variable.dateTime).format('MMMM D, YYYY');
+
+      toast({
+        title: `You have canceled your ${treatment} appointment scheduled on ${date}`,
+        status: 'success',
+      });
+
+      queryClient.invalidateQueries([queryKeys.appointments]);
+    },
+  });
+
+  return mutate;
 }
