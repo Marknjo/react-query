@@ -47,6 +47,37 @@ export function usePatchUser(): UseMutateFunction<
     mutationFn(data: User) {
       return patchUserOnServer(data, user);
     },
+    async onMutate(newData: User) {
+      // cancel any outgoing queries for user data, so old server data
+      // doesn't overwrite our optimistic update
+      queryClient.cancelQueries({ queryKey: [queryKeys.user] });
+
+      // snapshot of previous user value
+      const previousUserData: User | undefined = queryClient.getQueryData([
+        queryKeys.user,
+      ]);
+
+      // optimistically update the cache with new user value
+      updateUser(newData);
+
+      // return context object with snapshot value
+      return previousUserData;
+    },
+    onError(_err, _newData, context) {
+      // roll back cache to saved value
+      if (context) {
+        updateUser(context);
+
+        toast({
+          title: 'Update failed; Restoring previous values',
+          status: 'warning',
+        });
+      }
+    },
+    onSettled() {
+      // invalidate user query to make sure we're on sync with server data
+      queryClient.invalidateQueries([queryKeys.user]);
+    },
     onSuccess(userData) {
       if (userData) {
         queryClient.invalidateQueries([queryKeys.user]);

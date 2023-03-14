@@ -11,19 +11,31 @@ import {
   setStoredUser,
 } from '../../../user-storage';
 
+interface AxiosResponseWithCancel extends AxiosResponse {
+  cancel: () => void;
+}
+
 async function getUser(
   user: User | null,
   signal: AbortSignal | undefined,
-): Promise<User | null> {
+): Promise<AxiosResponseWithCancel | null> {
   if (!user) return null;
-  const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
+
+  console.log('Called');
+
+  const axiosResponse: AxiosResponseWithCancel = await axiosInstance.get(
     `/user/${user.id}`,
     {
       signal,
       headers: getJWTHeader(user),
     },
   );
-  return data.user;
+
+  axiosResponse.cancel = () => {
+    // cancel the request
+  };
+
+  return axiosResponse;
 }
 
 interface UseUser {
@@ -38,8 +50,16 @@ export function useUser(): UseUser {
   // call useQuery to update user data from server
   const { data: user } = useQuery({
     queryKey: [queryKeys.user],
-    queryFn: ({ signal }) => getUser(initialData, signal), // Never executes
+    queryFn: async ({ signal }) => {
+      const res = await getUser(initialData, signal);
+      return res?.data.user;
+    }, // Never executes
     initialData,
+    onSuccess(axiosResponse) {
+      /// set user
+      // setUser(axiosResponse.data.user)
+      return axiosResponse?.data?.user;
+    },
   });
 
   // Query client
