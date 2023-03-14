@@ -60,7 +60,9 @@ export function useUser(): UseUser {
     clearStoredUser();
 
     // Remove user appointments query
-    queryClient.removeQueries({ queryKey: ['user-appointments'] });
+    queryClient.removeQueries({
+      queryKey: [queryKeys.appointments, queryKeys.user, user?.id],
+    });
 
     // reset user to null in query cache
     queryClient.setQueryData([queryKeys.user], null);
